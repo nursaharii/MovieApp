@@ -1,5 +1,5 @@
 //
-//  MVVM_C_BoilerPlateUITestsLaunchTests.swift
+//  MovieAppUITestsLaunchTests.swift
 //  MVVM-C_BoilerPlateUITests
 //
 //  Created by Nurşah Ari on 17.02.2024.
@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class MVVM_C_BoilerPlateUITestsLaunchTests: XCTestCase {
+final class MovieAppUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

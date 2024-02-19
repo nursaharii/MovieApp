@@ -1,5 +1,5 @@
 //
-//  MVVM_C_BoilerPlateUITests.swift
+//  MovieAppUITests.swift
 //  MVVM-C_BoilerPlateUITests
 //
 //  Created by Nurşah Ari on 17.02.2024.
@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class MVVM_C_BoilerPlateUITests: XCTestCase {
+final class MovieAppUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

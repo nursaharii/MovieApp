@@ -10,33 +10,30 @@ import Alamofire
 
 enum API {
     case searchMovies(title: String)
-    case createMovie(title: String, description: String)
-
+    case getMovieDetail(imdbId: String)
+    
     var url: URL {
         switch self {
         case .searchMovies(let title):
             return URL(string: "\(URLConstants.baseURL)?s=\(title)&apikey=\(URLConstants.omdbAPIKey)")!
-        case .createMovie:
-            return URL(string: "https://api.example.com/movies")!
+        case .getMovieDetail(let imdbId):
+            return URL(string: "\(URLConstants.baseURL)?i=\(imdbId)&apikey=\(URLConstants.omdbAPIKey)")!
         }
     }
-
+    
     var method: HTTPMethod {
         switch self {
         case .searchMovies:
             return .get
-        case .createMovie:
-            return .post
+        case .getMovieDetail:
+            return .get
         }
     }
-
-    // `createMovie` için kullanılacak gövde parametreleri
+    
     var parameters: Parameters? {
         switch self {
-        case .searchMovies:
+        case .searchMovies, .getMovieDetail:
             return nil
-        case .createMovie(let title, let description):
-            return ["title": title, "description": description]
         }
     }
 }

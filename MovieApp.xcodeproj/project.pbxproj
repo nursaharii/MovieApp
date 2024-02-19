@@ -26,9 +26,11 @@
 		4C864DE52B80BA270096B34C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864DE42B80BA270096B34C /* AppDelegate.swift */; };
 		4C864DEE2B80BA2C0096B34C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C864DED2B80BA2C0096B34C /* Assets.xcassets */; };
 		4C864DF12B80BA2C0096B34C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C864DEF2B80BA2C0096B34C /* LaunchScreen.storyboard */; };
-		4C864DFC2B80BA2C0096B34C /* MVVM_C_BoilerPlateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864DFB2B80BA2C0096B34C /* MVVM_C_BoilerPlateTests.swift */; };
-		4C864E062B80BA2C0096B34C /* MVVM_C_BoilerPlateUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864E052B80BA2C0096B34C /* MVVM_C_BoilerPlateUITests.swift */; };
-		4C864E082B80BA2C0096B34C /* MVVM_C_BoilerPlateUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864E072B80BA2C0096B34C /* MVVM_C_BoilerPlateUITestsLaunchTests.swift */; };
+		4C864DFC2B80BA2C0096B34C /* MovieAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864DFB2B80BA2C0096B34C /* MovieAppTests.swift */; };
+		4C864E062B80BA2C0096B34C /* MovieAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864E052B80BA2C0096B34C /* MovieAppUITests.swift */; };
+		4C864E082B80BA2C0096B34C /* MovieAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864E072B80BA2C0096B34C /* MovieAppUITestsLaunchTests.swift */; };
+		4CDD66AB2B83AF1B00DDEF43 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4CDD66AA2B83AF1B00DDEF43 /* Kingfisher */; };
+		4CDD66AD2B83B89A00DDEF43 /* MovieDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDD66AC2B83B89A00DDEF43 /* MovieDetailViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,10 +71,11 @@
 		4C864DF02B80BA2C0096B34C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4C864DF22B80BA2C0096B34C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C864DF72B80BA2C0096B34C /* MovieAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C864DFB2B80BA2C0096B34C /* MVVM_C_BoilerPlateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVVM_C_BoilerPlateTests.swift; sourceTree = "<group>"; };
+		4C864DFB2B80BA2C0096B34C /* MovieAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAppTests.swift; sourceTree = "<group>"; };
 		4C864E012B80BA2C0096B34C /* MovieAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C864E052B80BA2C0096B34C /* MVVM_C_BoilerPlateUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVVM_C_BoilerPlateUITests.swift; sourceTree = "<group>"; };
-		4C864E072B80BA2C0096B34C /* MVVM_C_BoilerPlateUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MVVM_C_BoilerPlateUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4C864E052B80BA2C0096B34C /* MovieAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAppUITests.swift; sourceTree = "<group>"; };
+		4C864E072B80BA2C0096B34C /* MovieAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4CDD66AC2B83B89A00DDEF43 /* MovieDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CDD66AB2B83AF1B00DDEF43 /* Kingfisher in Frameworks */,
 				4C33BCE12B837C1C000942AA /* SkeletonView in Frameworks */,
 				4C138FCC2B813BA800B611F6 /* Alamofire in Frameworks */,
 			);
@@ -114,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				4C138FCF2B813CA500B611F6 /* MovieSearchViewModel.swift */,
+				4CDD66AC2B83B89A00DDEF43 /* MovieDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -186,7 +191,7 @@
 			children = (
 				4C864DE32B80BA270096B34C /* MovieApp */,
 				4C864DFA2B80BA2C0096B34C /* MovieAppTests */,
-				4C864E042B80BA2C0096B34C /* MVVM-C_BoilerPlateUITests */,
+				4C864E042B80BA2C0096B34C /* MovieAppUITests */,
 				4C864DE22B80BA270096B34C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -222,18 +227,18 @@
 		4C864DFA2B80BA2C0096B34C /* MovieAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				4C864DFB2B80BA2C0096B34C /* MVVM_C_BoilerPlateTests.swift */,
+				4C864DFB2B80BA2C0096B34C /* MovieAppTests.swift */,
 			);
 			path = MovieAppTests;
 			sourceTree = "<group>";
 		};
-		4C864E042B80BA2C0096B34C /* MVVM-C_BoilerPlateUITests */ = {
+		4C864E042B80BA2C0096B34C /* MovieAppUITests */ = {
 			isa = PBXGroup;
 			children = (
-				4C864E052B80BA2C0096B34C /* MVVM_C_BoilerPlateUITests.swift */,
-				4C864E072B80BA2C0096B34C /* MVVM_C_BoilerPlateUITestsLaunchTests.swift */,
+				4C864E052B80BA2C0096B34C /* MovieAppUITests.swift */,
+				4C864E072B80BA2C0096B34C /* MovieAppUITestsLaunchTests.swift */,
 			);
-			path = "MVVM-C_BoilerPlateUITests";
+			path = MovieAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,6 +260,7 @@
 			packageProductDependencies = (
 				4C138FCB2B813BA800B611F6 /* Alamofire */,
 				4C33BCE02B837C1C000942AA /* SkeletonView */,
+				4CDD66AA2B83AF1B00DDEF43 /* Kingfisher */,
 			);
 			productName = "MVVM-C_BoilerPlate";
 			productReference = 4C864DE12B80BA270096B34C /* MovieApp.app */;
@@ -331,6 +337,8 @@
 			packageReferences = (
 				4C138FCA2B813BA800B611F6 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				4C33BCDF2B837C1C000942AA /* XCRemoteSwiftPackageReference "SkeletonView" */,
+				4CDD66A62B839C5F00DDEF43 /* XCRemoteSwiftPackageReference "ios-snapshot-test-case" */,
+				4CDD66A92B83AF1B00DDEF43 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 4C864DE22B80BA270096B34C /* Products */;
 			projectDirPath = "";
@@ -378,6 +386,7 @@
 				4C33BCE72B83812B000942AA /* UIColor+Additions.swift in Sources */,
 				4C138FC72B81366100B611F6 /* MovieResponse.swift in Sources */,
 				4C138FD62B8144A100B611F6 /* MainCoordinator.swift in Sources */,
+				4CDD66AD2B83B89A00DDEF43 /* MovieDetailViewModel.swift in Sources */,
 				4C864DE52B80BA270096B34C /* AppDelegate.swift in Sources */,
 				4C33BCEE2B838E3F000942AA /* MovieDetailCell.swift in Sources */,
 				4C138FC52B8135F600B611F6 /* Movie.swift in Sources */,
@@ -396,7 +405,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C864DFC2B80BA2C0096B34C /* MVVM_C_BoilerPlateTests.swift in Sources */,
+				4C864DFC2B80BA2C0096B34C /* MovieAppTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,8 +413,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C864E082B80BA2C0096B34C /* MVVM_C_BoilerPlateUITestsLaunchTests.swift in Sources */,
-				4C864E062B80BA2C0096B34C /* MVVM_C_BoilerPlateUITests.swift in Sources */,
+				4C864E082B80BA2C0096B34C /* MovieAppUITestsLaunchTests.swift in Sources */,
+				4C864E062B80BA2C0096B34C /* MovieAppUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -743,6 +752,22 @@
 				minimumVersion = 1.30.4;
 			};
 		};
+		4CDD66A62B839C5F00DDEF43 /* XCRemoteSwiftPackageReference "ios-snapshot-test-case" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/uber/ios-snapshot-test-case.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		4CDD66A92B83AF1B00DDEF43 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.11.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -755,6 +780,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4C33BCDF2B837C1C000942AA /* XCRemoteSwiftPackageReference "SkeletonView" */;
 			productName = SkeletonView;
+		};
+		4CDD66AA2B83AF1B00DDEF43 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4CDD66A92B83AF1B00DDEF43 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

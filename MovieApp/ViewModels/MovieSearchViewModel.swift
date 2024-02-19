@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class MovieSearchViewModel {
-    @Published var movies: [Movie] = []
+    @Published var movies: [MovieInfo] = []
     var errorMessage: ((String?) -> Void)?
     
     private var cancellables: Set<AnyCancellable> = []
@@ -39,7 +39,7 @@ class MovieSearchViewModel {
                     break
                 }
             }, receiveValue: { [weak self] (response: MovieResponse) in
-                if let movies = response.movies {
+                if let movies = response.movieInfo {
                     self?.movies = movies
                 }
             })

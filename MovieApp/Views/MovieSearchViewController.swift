@@ -17,7 +17,6 @@ class MovieSearchViewController: UIViewController {
     var coordinator: MainCoordinator?
     private  var viewModel = MovieSearchViewModel()
     private var cancellables: Set<AnyCancellable> = []
-    var movies = [Movie]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +58,6 @@ class MovieSearchViewController: UIViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] movies in
                 guard let self = self else { return }
-                self.movies = movies
                 self.tableView.reloadData()
                 self.activityIndicator.stopAnimating()
                 self.tableView.refreshControl?.endRefreshing()
@@ -71,7 +69,6 @@ class MovieSearchViewController: UIViewController {
                 self.showErrorMessage(error)
             }
         }
-        
     }
     
     private func showErrorMessage(_ message: String) {
@@ -101,20 +98,21 @@ class MovieSearchViewController: UIViewController {
 
 extension MovieSearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return viewModel.movies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? UITableViewCell else {
             fatalError("Unable to dequeue UITableViewCell.")
         }
-        cell.textLabel?.text = movies[indexPath.row].title
+        cell.textLabel?.text = viewModel.movies[indexPath.row].title
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        coordinator?.showMovieDetail(movie: self.movies[indexPath.row])
+        guard let id = viewModel.movies[indexPath.row].imdbID else { return }
+        coordinator?.showMovieDetail(id)
     }
 }
 

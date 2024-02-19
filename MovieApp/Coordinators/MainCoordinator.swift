@@ -17,9 +17,9 @@ class MainCoordinator: Coordinator {
         navigationController?.pushViewController(vc, animated: false)
     }
     
-    func showMovieDetail(movie: Movie) {
+    func showMovieDetail(_ movieId: String) {
         let detailVC = MovieDetailViewController()
-        detailVC.movie = movie
+        detailVC.movieId = movieId
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

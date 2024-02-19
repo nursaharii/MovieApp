@@ -7,35 +7,41 @@
 
 import UIKit
 import SkeletonView
+import Kingfisher
+import Combine
 
 class MovieDetailViewController: UIViewController, UITextViewDelegate {
     
     private lazy var insideView = UIView()
-    private lazy var infoView = UIView()
     private lazy var scrollView = UIScrollView()
     private lazy var imageView = UIImageView()
+    private lazy var infoView = UIView()
+    private var collectionView : UICollectionView!
     private lazy var plotTextView = UITextView()
-    private lazy var collectionView = UICollectionView()
     
-    var movie : Movie?
-    var name = String()
+    private  var viewModel = MovieDetailViewModel()
+    private var cancellables: Set<AnyCancellable> = []
+    
+    var movieId : String = "" {
+        didSet {
+            viewModel.getMovieDetail(for: movieId)
+        }
+    }
     private var padding: CGFloat = 20
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindViewModel()
     }
     
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         prepareUI()
-        insideView.showAnimatedSkeleton()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
     
     func prepareUI() {
+        insideView.showAnimatedSkeleton()
         configureViewController()
         configureScrollView()
         configureInsideView()
@@ -43,19 +49,55 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
         configureInfoView()
         configureCollectionView()
         configurePlotTextView()
+        
     }
+    
+    func updateUI() {
+        guard let movie = viewModel.movie else { return}
+        imageView.kf.setImage(with: URL(string: movie.poster ?? ""))
+        title = movie.title
+        plotTextView.text = movie.plot
+        self.insideView.stopSkeletonAnimation()
+        self.collectionView.reloadData()
+    }
+    
+    private func bindViewModel() {
+        viewModel.$movie
+            .receive(on: RunLoop.main)
+            .sink { [weak self] movie in
+                guard let self = self else { return }
+                self.updateUI()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.errorMessage = { errorMessage in
+            if let error = errorMessage {
+                self.showErrorMessage(error)
+            }
+        }
+    }
+    
+    private func showErrorMessage(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
+    }
+    
+}
 
+//MARK: Configure UI
+extension MovieDetailViewController {
     func configureViewController() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = .black
         navigationItem.backBarButtonItem?.image = UIImage(systemName: "chevron.backward")
-        title = name
+        navigationItem.backBarButtonItem?.title = ""
     }
-
+    
     func configureScrollView() {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + padding)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
@@ -65,7 +107,7 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ])
     }
-
+    
     func configureInsideView() {
         insideView.frame.size = CGSize(width: view.frame.width, height: view.frame.height + padding)
         insideView.isSkeletonable = true
@@ -94,27 +136,31 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
         insideView.addSubview(infoView)
         
         NSLayoutConstraint.activate([
-            infoView.heightAnchor.constraint(equalToConstant: 400),
             infoView.widthAnchor.constraint(equalToConstant: view.frame.width),
             infoView.leadingAnchor.constraint(equalTo: insideView.leadingAnchor),
             infoView.topAnchor.constraint(equalTo: imageView.safeAreaLayoutGuide.topAnchor, constant: 300),
-            infoView.trailingAnchor.constraint(equalTo: insideView.trailingAnchor)
+            infoView.trailingAnchor.constraint(equalTo: insideView.trailingAnchor),
+            infoView.bottomAnchor.constraint(equalTo: insideView.bottomAnchor)
         ])
     }
+    
     func configureCollectionView() {
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
+        collectionView = UICollectionView(frame: infoView.frame, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .systemGray6
         collectionView.isSkeletonable = true
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.topRadius = 30
+        collectionView.register(MovieDetailCell.self,forCellWithReuseIdentifier: MovieDetailCell.identifier)
         infoView.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor),
-            imageView.topAnchor.constraint(equalTo: infoView.safeAreaLayoutGuide.topAnchor,constant: 30),
-            imageView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 500)
+            collectionView.heightAnchor.constraint(equalToConstant: 300),
+            collectionView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor),
+            collectionView.topAnchor.constraint(equalTo: infoView.safeAreaLayoutGuide.topAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor),
         ])
     }
     
@@ -131,21 +177,25 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
         infoView.addSubview(plotTextView)
         
         NSLayoutConstraint.activate([
-            plotTextView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor, constant: padding),
-            plotTextView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor, constant: -padding),
             plotTextView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: padding),
+            plotTextView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor, constant: padding),
+            plotTextView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor, constant: -padding)
         ])
     }
 }
 
-extension MovieDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MovieDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        4
+        if viewModel.movie == nil {
+            return 0
+        } else {
+            return 4
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieDetailCell.identifier, for: indexPath) as? MovieDetailCell {
-            guard let movie = self.movie else { return }
+            guard let movie = viewModel.movie else { return UICollectionViewCell() }
             switch indexPath.row {
             case 0:
                 cell.setLabel(movie.title ?? "")
@@ -163,5 +213,12 @@ extension MovieDetailViewController: UICollectionViewDelegate, UICollectionViewD
         return UICollectionViewCell()
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.collectionView.frame.size.width , height: 50)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
     
 }

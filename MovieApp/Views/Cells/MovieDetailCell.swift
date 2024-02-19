@@ -10,23 +10,24 @@ import UIKit
 class MovieDetailCell: UICollectionViewCell {
     private lazy var infoLabel = PaddingLabel()
     
-    static let identifier = "HomePageListCell"
+    static let identifier = String(describing: MovieDetailCell.self)
     
-    static func nib() -> UINib {
-        return UINib(nibName: "HomePageListCell", bundle: nil)
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         prepareUI()
     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     
     func setLabel(_ info: String) {
         infoLabel.text = info
     }
     
     func prepareUI() {
-        infoLabel.font = .boldSystemFont(ofSize: 32)
+        infoLabel.font = .boldSystemFont(ofSize: 16)
         infoLabel.textColor = .label
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
         infoLabel.isSkeletonable = true
@@ -40,7 +41,6 @@ class MovieDetailCell: UICollectionViewCell {
             infoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             infoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             infoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 10),
-            infoLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

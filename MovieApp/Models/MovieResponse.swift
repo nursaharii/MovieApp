@@ -7,10 +7,34 @@
 
 import Foundation
 
-struct MovieResponse: Decodable {
-    let movies: [Movie]?
+struct MovieResponse: Codable {
+    let movieInfo: [MovieInfo]?
+    let totalResults: String?
+    let response: String?
+    let error: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case movieInfo = "Search"
+        case totalResults = "totalResults"
+        case response = "Response"
+        case error = "Error"
+    }
+}
+
+struct MovieInfo: Codable {
+    let title: String?
+    let year: String?
+    let imdbID: String?
+    let type: String?
+    let poster: String?
+    
+
     
     enum CodingKeys: String, CodingKey {
-        case movies = "Search"
+        case title = "Title"
+        case year = "Year"
+        case imdbID = "imdbID"
+        case type = "Type"
+        case poster = "Poster"
     }
 }

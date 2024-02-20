@@ -29,6 +29,8 @@
 		4C864DFC2B80BA2C0096B34C /* MovieAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864DFB2B80BA2C0096B34C /* MovieAppTests.swift */; };
 		4C864E062B80BA2C0096B34C /* MovieAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864E052B80BA2C0096B34C /* MovieAppUITests.swift */; };
 		4C864E082B80BA2C0096B34C /* MovieAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C864E072B80BA2C0096B34C /* MovieAppUITestsLaunchTests.swift */; };
+		4C937A182B84D4FE006DB497 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = 4C937A172B84D4FE006DB497 /* Cosmos */; };
+		4CDD276A2B840B2500EFBC77 /* MovieDetailReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDD27692B840B2500EFBC77 /* MovieDetailReusableView.swift */; };
 		4CDD66AB2B83AF1B00DDEF43 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4CDD66AA2B83AF1B00DDEF43 /* Kingfisher */; };
 		4CDD66AD2B83B89A00DDEF43 /* MovieDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDD66AC2B83B89A00DDEF43 /* MovieDetailViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -75,6 +77,7 @@
 		4C864E012B80BA2C0096B34C /* MovieAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C864E052B80BA2C0096B34C /* MovieAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAppUITests.swift; sourceTree = "<group>"; };
 		4C864E072B80BA2C0096B34C /* MovieAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4CDD27692B840B2500EFBC77 /* MovieDetailReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailReusableView.swift; sourceTree = "<group>"; };
 		4CDD66AC2B83B89A00DDEF43 /* MovieDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +88,7 @@
 			files = (
 				4CDD66AB2B83AF1B00DDEF43 /* Kingfisher in Frameworks */,
 				4C33BCE12B837C1C000942AA /* SkeletonView in Frameworks */,
+				4C937A182B84D4FE006DB497 /* Cosmos in Frameworks */,
 				4C138FCC2B813BA800B611F6 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				4C33BCED2B838E3F000942AA /* MovieDetailCell.swift */,
+				4CDD27692B840B2500EFBC77 /* MovieDetailReusableView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -261,6 +266,7 @@
 				4C138FCB2B813BA800B611F6 /* Alamofire */,
 				4C33BCE02B837C1C000942AA /* SkeletonView */,
 				4CDD66AA2B83AF1B00DDEF43 /* Kingfisher */,
+				4C937A172B84D4FE006DB497 /* Cosmos */,
 			);
 			productName = "MVVM-C_BoilerPlate";
 			productReference = 4C864DE12B80BA270096B34C /* MovieApp.app */;
@@ -339,6 +345,7 @@
 				4C33BCDF2B837C1C000942AA /* XCRemoteSwiftPackageReference "SkeletonView" */,
 				4CDD66A62B839C5F00DDEF43 /* XCRemoteSwiftPackageReference "ios-snapshot-test-case" */,
 				4CDD66A92B83AF1B00DDEF43 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				4C937A162B84D4FE006DB497 /* XCRemoteSwiftPackageReference "Cosmos" */,
 			);
 			productRefGroup = 4C864DE22B80BA270096B34C /* Products */;
 			projectDirPath = "";
@@ -396,6 +403,7 @@
 				4C138FD22B813F8100B611F6 /* MovieSearchViewController.swift in Sources */,
 				4C33BCE52B838019000942AA /* UIView+Ext.swift in Sources */,
 				4C138FDA2B8147D300B611F6 /* URLConstants.swift in Sources */,
+				4CDD276A2B840B2500EFBC77 /* MovieDetailReusableView.swift in Sources */,
 				4C138FD82B81465700B611F6 /* MovieDetailViewController.swift in Sources */,
 				4C138FD42B81448800B611F6 /* Coordinator.swift in Sources */,
 			);
@@ -752,6 +760,14 @@
 				minimumVersion = 1.30.4;
 			};
 		};
+		4C937A162B84D4FE006DB497 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 25.0.1;
+			};
+		};
 		4CDD66A62B839C5F00DDEF43 /* XCRemoteSwiftPackageReference "ios-snapshot-test-case" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/uber/ios-snapshot-test-case.git";
@@ -780,6 +796,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4C33BCDF2B837C1C000942AA /* XCRemoteSwiftPackageReference "SkeletonView" */;
 			productName = SkeletonView;
+		};
+		4C937A172B84D4FE006DB497 /* Cosmos */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C937A162B84D4FE006DB497 /* XCRemoteSwiftPackageReference "Cosmos" */;
+			productName = Cosmos;
 		};
 		4CDD66AA2B83AF1B00DDEF43 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -30,7 +30,6 @@ class MovieDetailCell: UICollectionViewCell {
         infoLabel.font = .boldSystemFont(ofSize: 16)
         infoLabel.textColor = .label
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
-        infoLabel.isSkeletonable = true
         infoLabel.cornerRadius = 10
         infoLabel.addShadow(opacity: 0.5)
         infoLabel.edgeInset = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)

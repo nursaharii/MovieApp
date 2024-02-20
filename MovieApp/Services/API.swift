@@ -17,7 +17,7 @@ enum API {
         case .searchMovies(let title):
             return URL(string: "\(URLConstants.baseURL)?s=\(title)&apikey=\(URLConstants.omdbAPIKey)")!
         case .getMovieDetail(let imdbId):
-            return URL(string: "\(URLConstants.baseURL)?i=\(imdbId)&apikey=\(URLConstants.omdbAPIKey)")!
+            return URL(string: "\(URLConstants.baseURL)?i=\(imdbId)&plot=full&apikey=\(URLConstants.omdbAPIKey)")!
         }
     }
     

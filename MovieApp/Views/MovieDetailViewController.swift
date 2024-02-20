@@ -9,6 +9,7 @@ import UIKit
 import SkeletonView
 import Kingfisher
 import Combine
+import Cosmos
 
 class MovieDetailViewController: UIViewController, UITextViewDelegate {
     
@@ -16,17 +17,27 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
     private lazy var scrollView = UIScrollView()
     private lazy var imageView = UIImageView()
     private lazy var infoView = UIView()
-    private var collectionView : UICollectionView!
     private lazy var plotTextView = UITextView()
-    
+    private lazy var cosmosView = CosmosView()
+    private lazy var cosmosOutsideView = UIView()
     private  var viewModel = MovieDetailViewModel()
+    private var stackView = UIStackView()
+    private var titleLabel = UILabel()
+    private var yearLabel = UILabel()
+    private var languageLabel = UILabel()
+    private var genreLabel = UILabel()
+    
+    
     private var cancellables: Set<AnyCancellable> = []
+    private var movieGenre = [String]()
+    private var movieLanguage = [String]()
     
     var movieId : String = "" {
         didSet {
             viewModel.getMovieDetail(for: movieId)
         }
     }
+    
     private var padding: CGFloat = 20
     
     
@@ -41,13 +52,19 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
     }
     
     func prepareUI() {
-        insideView.showAnimatedSkeleton()
+        infoView.showAnimatedSkeleton()
         configureViewController()
         configureScrollView()
         configureInsideView()
         configureImageView()
         configureInfoView()
-        configureCollectionView()
+        configureTitleLabel()
+        configureCosmosOutsideView()
+        configureCosmosView()
+        configureStackView()
+        configureYearLabel()
+        configureLanguageLabel()
+        configureGenreLabel()
         configurePlotTextView()
         
     }
@@ -57,8 +74,17 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
         imageView.kf.setImage(with: URL(string: movie.poster ?? ""))
         title = movie.title
         plotTextView.text = movie.plot
-        self.insideView.stopSkeletonAnimation()
-        self.collectionView.reloadData()
+        infoView.stopSkeletonAnimation()
+        if let raiting = movie.imdbRating, let doubleRating = Double(raiting) {
+            cosmosView.rating = doubleRating/2
+        }
+        
+        titleLabel.text = movie.title
+        yearLabel.text = movie.year
+        if let genre = movie.genre?.components(separatedBy: ",").first as? String {
+            genreLabel.text = genre
+        }
+        languageLabel.text = movie.language
     }
     
     private func bindViewModel() {
@@ -90,14 +116,15 @@ extension MovieDetailViewController {
     func configureViewController() {
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.tintColor = .black
-        navigationItem.backBarButtonItem?.image = UIImage(systemName: "chevron.backward")
-        navigationItem.backBarButtonItem?.title = ""
+        navigationController?.navigationBar.backItem?.title = ""
+        navigationItem.largeTitleDisplayMode = .never
+        view.isSkeletonable = true
     }
     
     func configureScrollView() {
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height + padding)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
+        scrollView.isSkeletonable = true
         view.addSubview(scrollView)
         
         NSLayoutConstraint.activate([
@@ -133,6 +160,7 @@ extension MovieDetailViewController {
         infoView.backgroundColor = .white
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.topRadius = 30
+        infoView.isSkeletonable = true
         insideView.addSubview(infoView)
         
         NSLayoutConstraint.activate([
@@ -144,23 +172,112 @@ extension MovieDetailViewController {
         ])
     }
     
-    func configureCollectionView() {
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        collectionView = UICollectionView(frame: infoView.frame, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.isSkeletonable = true
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.topRadius = 30
-        collectionView.register(MovieDetailCell.self,forCellWithReuseIdentifier: MovieDetailCell.identifier)
-        infoView.addSubview(collectionView)
+    func configureTitleLabel() {
+        titleLabel.font = .boldSystemFont(ofSize: 32)
+        titleLabel.textColor = .label
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.isSkeletonable = true
+        titleLabel.text = "title"
+        titleLabel.numberOfLines = 0
+        titleLabel.textAlignment = .center
+        infoView.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
-            collectionView.heightAnchor.constraint(equalToConstant: 300),
-            collectionView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor),
-            collectionView.topAnchor.constraint(equalTo: infoView.safeAreaLayoutGuide.topAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: infoView.topAnchor, constant: padding),
+            titleLabel.leadingAnchor.constraint(equalTo: infoView.leadingAnchor, constant: padding),
+            titleLabel.trailingAnchor.constraint(equalTo: infoView.trailingAnchor, constant: -padding),
+        ])
+    }
+
+    func configureCosmosOutsideView() {
+        cosmosOutsideView.backgroundColor = .white
+        cosmosOutsideView.translatesAutoresizingMaskIntoConstraints = false
+        cosmosOutsideView.isSkeletonable = true
+        infoView.addSubview(cosmosOutsideView)
+        
+        NSLayoutConstraint.activate([
+            cosmosOutsideView.heightAnchor.constraint(equalToConstant: 30),
+            cosmosOutsideView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            cosmosOutsideView.widthAnchor.constraint(equalToConstant: infoView.frame.width),
+            cosmosOutsideView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor),
+            cosmosOutsideView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor),
+        ])
+    }
+    
+    func configureCosmosView() {
+        cosmosView.translatesAutoresizingMaskIntoConstraints = false
+        cosmosView.settings.updateOnTouch = false
+        cosmosView.settings.totalStars = 5
+        cosmosView.settings.filledColor = .orange
+        cosmosView.settings.emptyBorderColor = .orange
+        cosmosView.settings.filledBorderColor = .orange
+        cosmosView.settings.starMargin = 5
+        cosmosView.settings.starSize = 20
+        cosmosView.settings.fillMode = .precise
+        cosmosView.settings.disablePanGestures = true
+        cosmosView.isSkeletonable = true
+        
+        cosmosOutsideView.addSubview(cosmosView)
+        
+        NSLayoutConstraint.activate([
+            cosmosView.centerXAnchor.constraint(equalTo: cosmosOutsideView.centerXAnchor),
+            cosmosView.centerYAnchor.constraint(equalTo: cosmosOutsideView.centerYAnchor)
+        ])
+    }
+    
+    func configureStackView() {
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isSkeletonable = true
+        stackView.alignment = .fill
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        infoView.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: infoView.centerXAnchor),
+            stackView.topAnchor.constraint(equalTo: cosmosOutsideView.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor,constant: 50),
+            stackView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor,constant: -50),
+        ])
+    }
+    
+    func configureYearLabel() {
+        yearLabel.font = .systemFont(ofSize: 12)
+        yearLabel.textColor = .label
+        yearLabel.translatesAutoresizingMaskIntoConstraints = false
+        yearLabel.isSkeletonable = true
+        yearLabel.text = "year"
+        stackView.addArrangedSubview(yearLabel)
+        NSLayoutConstraint.activate([
+            yearLabel.heightAnchor.constraint(equalToConstant: 30),
+        ])
+    }
+
+    func configureLanguageLabel() {
+        languageLabel.font = .systemFont(ofSize: 12)
+        languageLabel.textColor = .label
+        languageLabel.translatesAutoresizingMaskIntoConstraints = false
+        languageLabel.isSkeletonable = true
+        languageLabel.textAlignment = .center
+        languageLabel.text = "language"
+        stackView.addArrangedSubview(languageLabel)
+        
+        NSLayoutConstraint.activate([
+            languageLabel.heightAnchor.constraint(equalToConstant: 30),
+        ])
+    }
+    
+    func configureGenreLabel() {
+        genreLabel.font = .systemFont(ofSize: 12)
+        genreLabel.textColor = .label
+        genreLabel.translatesAutoresizingMaskIntoConstraints = false
+        genreLabel.isSkeletonable = true
+        genreLabel.textAlignment = .right
+        genreLabel.text = "genre"
+        stackView.addArrangedSubview(genreLabel)
+        
+        NSLayoutConstraint.activate([
+            genreLabel.heightAnchor.constraint(equalToConstant: 30),
         ])
     }
     
@@ -169,56 +286,16 @@ extension MovieDetailViewController {
         plotTextView.sizeToFit()
         plotTextView.isScrollEnabled = false
         plotTextView.isSkeletonable = true
-        plotTextView.cornerRadius = 8
-        plotTextView.addShadow(opacity: 0.6)
         plotTextView.isUserInteractionEnabled = false
         plotTextView.delegate = self
         plotTextView.font = .systemFont(ofSize: 14)
+        plotTextView.textAlignment = .center
         infoView.addSubview(plotTextView)
         
         NSLayoutConstraint.activate([
-            plotTextView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: padding),
+            plotTextView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: padding),
             plotTextView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor, constant: padding),
             plotTextView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor, constant: -padding)
         ])
     }
-}
-
-extension MovieDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if viewModel.movie == nil {
-            return 0
-        } else {
-            return 4
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieDetailCell.identifier, for: indexPath) as? MovieDetailCell {
-            guard let movie = viewModel.movie else { return UICollectionViewCell() }
-            switch indexPath.row {
-            case 0:
-                cell.setLabel(movie.title ?? "")
-            case 1:
-                cell.setLabel(movie.type ?? "")
-            case 2:
-                cell.setLabel(movie.imdbRating ?? "")
-            case 3:
-                cell.setLabel(movie.language ?? "")
-            default:
-                cell.setLabel(movie.type ?? "")
-            }
-            return cell
-        }
-        return UICollectionViewCell()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.collectionView.frame.size.width , height: 50)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
-    }
-    
 }

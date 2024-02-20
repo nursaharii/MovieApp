@@ -260,6 +260,7 @@ extension MovieDetailViewController {
         languageLabel.textColor = .label
         languageLabel.translatesAutoresizingMaskIntoConstraints = false
         languageLabel.isSkeletonable = true
+        languageLabel.numberOfLines = 0
         languageLabel.textAlignment = .center
         languageLabel.text = "language"
         stackView.addArrangedSubview(languageLabel)
@@ -304,7 +305,8 @@ extension MovieDetailViewController {
     
     func configureGoToImdbButton() {
         goToImdbButton.translatesAutoresizingMaskIntoConstraints = false
-        goToImdbButton.setTitleColor(.white, for: .normal)
+        goToImdbButton.setTitleColor(.systemYellow, for: .normal)
+        goToImdbButton.titleLabel?.font = .boldSystemFont(ofSize: 20)
         goToImdbButton.backgroundColor = .black
         goToImdbButton.configuration?.titlePadding = 10
         goToImdbButton.cornerRadius = 5
@@ -314,10 +316,11 @@ extension MovieDetailViewController {
         infoView.addSubview(goToImdbButton)
         
         NSLayoutConstraint.activate([
-            goToImdbButton.widthAnchor.constraint(equalToConstant: 150),
             goToImdbButton.heightAnchor.constraint(equalToConstant: 50),
             goToImdbButton.topAnchor.constraint(equalTo: plotTextView.bottomAnchor),
             goToImdbButton.centerXAnchor.constraint(equalTo: infoView.centerXAnchor),
+            goToImdbButton.leftAnchor.constraint(equalTo: infoView.leftAnchor,constant: padding),
+            goToImdbButton.rightAnchor.constraint(equalTo: infoView.rightAnchor, constant: -padding)
         ])
     }
     

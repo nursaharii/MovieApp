@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class MovieDetailViewModel {
     
@@ -33,9 +34,20 @@ class MovieDetailViewModel {
                 }
             }, receiveValue: { [weak self] (response: Movie) in
                 guard let self = self else { return }
-                    self.movie = response
+                self.movie = response
             })
             .store(in: &cancellables)
+    }
+    
+    func goToiMDBPage(_ imdbId: String) {
+        
+        if let url = URL(string: URLConstants.imdbURL+imdbId), UIApplication.shared.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
     }
 }
 

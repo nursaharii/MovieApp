@@ -20,12 +20,14 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
     private lazy var plotTextView = UITextView()
     private lazy var cosmosView = CosmosView()
     private lazy var cosmosOutsideView = UIView()
-    private  var viewModel = MovieDetailViewModel()
-    private var stackView = UIStackView()
-    private var titleLabel = UILabel()
-    private var yearLabel = UILabel()
-    private var languageLabel = UILabel()
-    private var genreLabel = UILabel()
+    private lazy var viewModel = MovieDetailViewModel()
+    private lazy var stackView = UIStackView()
+    private lazy var titleLabel = UILabel()
+    private lazy var yearLabel = UILabel()
+    private lazy var languageLabel = UILabel()
+    private lazy var genreLabel = UILabel()
+    private lazy var goToImdbButton = UIButton()
+    
     
     
     private var cancellables: Set<AnyCancellable> = []
@@ -66,7 +68,7 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
         configureLanguageLabel()
         configureGenreLabel()
         configurePlotTextView()
-        
+        configureGoToImdbButton()
     }
     
     func updateUI() {
@@ -188,7 +190,7 @@ extension MovieDetailViewController {
             titleLabel.trailingAnchor.constraint(equalTo: infoView.trailingAnchor, constant: -padding),
         ])
     }
-
+    
     func configureCosmosOutsideView() {
         cosmosOutsideView.backgroundColor = .white
         cosmosOutsideView.translatesAutoresizingMaskIntoConstraints = false
@@ -252,7 +254,7 @@ extension MovieDetailViewController {
             yearLabel.heightAnchor.constraint(equalToConstant: 30),
         ])
     }
-
+    
     func configureLanguageLabel() {
         languageLabel.font = .systemFont(ofSize: 12)
         languageLabel.textColor = .label
@@ -284,7 +286,7 @@ extension MovieDetailViewController {
     func configurePlotTextView() {
         plotTextView.translatesAutoresizingMaskIntoConstraints = false
         plotTextView.sizeToFit()
-        plotTextView.isScrollEnabled = false
+        plotTextView.isScrollEnabled = true
         plotTextView.isSkeletonable = true
         plotTextView.isUserInteractionEnabled = false
         plotTextView.delegate = self
@@ -293,9 +295,33 @@ extension MovieDetailViewController {
         infoView.addSubview(plotTextView)
         
         NSLayoutConstraint.activate([
+            plotTextView.heightAnchor.constraint(lessThanOrEqualToConstant: 150),
             plotTextView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: padding),
             plotTextView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor, constant: padding),
             plotTextView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor, constant: -padding)
         ])
+    }
+    
+    func configureGoToImdbButton() {
+        goToImdbButton.translatesAutoresizingMaskIntoConstraints = false
+        goToImdbButton.setTitleColor(.white, for: .normal)
+        goToImdbButton.backgroundColor = .black
+        goToImdbButton.configuration?.titlePadding = 10
+        goToImdbButton.cornerRadius = 5
+        goToImdbButton.setTitle("Go To IMDB Page", for: .normal)
+        goToImdbButton.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        
+        infoView.addSubview(goToImdbButton)
+        
+        NSLayoutConstraint.activate([
+            goToImdbButton.widthAnchor.constraint(equalToConstant: 150),
+            goToImdbButton.heightAnchor.constraint(equalToConstant: 50),
+            goToImdbButton.topAnchor.constraint(equalTo: plotTextView.bottomAnchor),
+            goToImdbButton.centerXAnchor.constraint(equalTo: infoView.centerXAnchor),
+        ])
+    }
+    
+    @objc func buttonAction(_ sender:UIButton!) {
+        viewModel.goToiMDBPage(movieId)
     }
 }

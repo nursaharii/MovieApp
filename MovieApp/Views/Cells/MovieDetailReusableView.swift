@@ -8,7 +8,7 @@
 import UIKit
 
 class MovieDetailReusableView: UICollectionReusableView {
-     lazy var titleLabel = PaddingLabel()
+    lazy var titleLabel = PaddingLabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

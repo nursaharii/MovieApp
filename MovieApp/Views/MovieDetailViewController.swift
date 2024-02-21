@@ -45,13 +45,17 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindViewModel()
     }
     
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         prepareUI()
         insideView.showAnimatedSkeleton()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        bindViewModel()
     }
     
     func prepareUI() {
@@ -161,6 +165,7 @@ extension MovieDetailViewController {
         infoView.translatesAutoresizingMaskIntoConstraints = false
         infoView.topRadius = 30
         infoView.isSkeletonable = true
+        infoView.isHiddenWhenSkeletonIsActive = true
         insideView.addSubview(infoView)
         
         NSLayoutConstraint.activate([

@@ -317,7 +317,7 @@ extension MovieDetailViewController {
         
         NSLayoutConstraint.activate([
             goToImdbButton.heightAnchor.constraint(equalToConstant: 50),
-            goToImdbButton.topAnchor.constraint(equalTo: plotTextView.bottomAnchor),
+            goToImdbButton.topAnchor.constraint(equalTo: plotTextView.bottomAnchor,constant: padding),
             goToImdbButton.centerXAnchor.constraint(equalTo: infoView.centerXAnchor),
             goToImdbButton.leftAnchor.constraint(equalTo: infoView.leftAnchor,constant: padding),
             goToImdbButton.rightAnchor.constraint(equalTo: infoView.rightAnchor, constant: -padding)

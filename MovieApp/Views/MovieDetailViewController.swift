@@ -51,10 +51,10 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         prepareUI()
+        insideView.showAnimatedSkeleton()
     }
     
     func prepareUI() {
-        infoView.showAnimatedSkeleton()
         configureViewController()
         configureScrollView()
         configureInsideView()
@@ -76,11 +76,9 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
         imageView.kf.setImage(with: URL(string: movie.poster ?? ""))
         title = movie.title
         plotTextView.text = movie.plot
-        infoView.stopSkeletonAnimation()
         if let raiting = movie.imdbRating, let doubleRating = Double(raiting) {
             cosmosView.rating = doubleRating/2
         }
-        
         titleLabel.text = movie.title
         yearLabel.text = movie.year
         if let genre = movie.genre?.components(separatedBy: ",").first as? String {
@@ -94,6 +92,7 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
             .receive(on: RunLoop.main)
             .sink { [weak self] movie in
                 guard let self = self else { return }
+                self.insideView.hideSkeleton()
                 self.updateUI()
             }
             .store(in: &cancellables)
@@ -120,7 +119,6 @@ extension MovieDetailViewController {
         navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.backItem?.title = ""
         navigationItem.largeTitleDisplayMode = .never
-        view.isSkeletonable = true
     }
     
     func configureScrollView() {
@@ -179,7 +177,6 @@ extension MovieDetailViewController {
         titleLabel.textColor = .label
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.isSkeletonable = true
-        titleLabel.text = "title"
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .center
         infoView.addSubview(titleLabel)
@@ -201,8 +198,8 @@ extension MovieDetailViewController {
             cosmosOutsideView.heightAnchor.constraint(equalToConstant: 30),
             cosmosOutsideView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             cosmosOutsideView.widthAnchor.constraint(equalToConstant: infoView.frame.width),
-            cosmosOutsideView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor),
-            cosmosOutsideView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor),
+            cosmosOutsideView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor,constant: padding),
+            cosmosOutsideView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor,constant: -padding),
         ])
     }
     
@@ -217,7 +214,6 @@ extension MovieDetailViewController {
         cosmosView.settings.starSize = 20
         cosmosView.settings.fillMode = .precise
         cosmosView.settings.disablePanGestures = true
-        cosmosView.isSkeletonable = true
         
         cosmosOutsideView.addSubview(cosmosView)
         
@@ -248,7 +244,6 @@ extension MovieDetailViewController {
         yearLabel.textColor = .label
         yearLabel.translatesAutoresizingMaskIntoConstraints = false
         yearLabel.isSkeletonable = true
-        yearLabel.text = "year"
         stackView.addArrangedSubview(yearLabel)
         NSLayoutConstraint.activate([
             yearLabel.heightAnchor.constraint(equalToConstant: 30),
@@ -262,7 +257,6 @@ extension MovieDetailViewController {
         languageLabel.isSkeletonable = true
         languageLabel.numberOfLines = 0
         languageLabel.textAlignment = .center
-        languageLabel.text = "language"
         stackView.addArrangedSubview(languageLabel)
         
         NSLayoutConstraint.activate([
@@ -276,7 +270,6 @@ extension MovieDetailViewController {
         genreLabel.translatesAutoresizingMaskIntoConstraints = false
         genreLabel.isSkeletonable = true
         genreLabel.textAlignment = .right
-        genreLabel.text = "genre"
         stackView.addArrangedSubview(genreLabel)
         
         NSLayoutConstraint.activate([
@@ -287,7 +280,7 @@ extension MovieDetailViewController {
     func configurePlotTextView() {
         plotTextView.translatesAutoresizingMaskIntoConstraints = false
         plotTextView.sizeToFit()
-        plotTextView.isScrollEnabled = true
+        plotTextView.isScrollEnabled = false
         plotTextView.isSkeletonable = true
         plotTextView.isUserInteractionEnabled = false
         plotTextView.delegate = self
@@ -296,7 +289,7 @@ extension MovieDetailViewController {
         infoView.addSubview(plotTextView)
         
         NSLayoutConstraint.activate([
-            plotTextView.heightAnchor.constraint(lessThanOrEqualToConstant: 150),
+            plotTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 150),
             plotTextView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: padding),
             plotTextView.leadingAnchor.constraint(equalTo: infoView.leadingAnchor, constant: padding),
             plotTextView.trailingAnchor.constraint(equalTo: infoView.trailingAnchor, constant: -padding)
@@ -311,6 +304,7 @@ extension MovieDetailViewController {
         goToImdbButton.configuration?.titlePadding = 10
         goToImdbButton.cornerRadius = 5
         goToImdbButton.setTitle("Go To IMDB Page", for: .normal)
+        goToImdbButton.isSkeletonable = true
         goToImdbButton.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
         
         infoView.addSubview(goToImdbButton)

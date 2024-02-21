@@ -25,12 +25,16 @@ class MovieSearchViewController: UIViewController {
         setupActivityIndicator()
     }
     
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        title = "Search Movie"
+    }
+    
     private func setupUI() {
-        
         view.backgroundColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.tintColor = .black
-        title = "Search Movie"
         
         // SearchController Setup
         searchController.searchResultsUpdater = self

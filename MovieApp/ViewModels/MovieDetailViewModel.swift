@@ -13,12 +13,12 @@ class MovieDetailViewModel {
     
     @Published var movie : Movie?
     var errorMessage: ((String?) -> Void)?
-    
     private var cancellables: Set<AnyCancellable> = []
     private var networkService = NetworkService()
+    private var urlHandler: URLHandler
     
-    init() {
-        // ViewModel initialization
+    init(urlHandler: URLHandler = ApplicationURLHandler()) {
+        self.urlHandler = urlHandler
     }
     
     func getMovieDetail(for id: String) {
@@ -39,14 +39,9 @@ class MovieDetailViewModel {
             .store(in: &cancellables)
     }
     
-    func goToiMDBPage(_ imdbId: String) {
-        
+    func goToIMDBPage(_ imdbId: String) {
         if let url = URL(string: URLConstants.imdbURL+imdbId), UIApplication.shared.canOpenURL(url) {
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                UIApplication.shared.openURL(url)
-            }
+            urlHandler.openURL(url)
         }
     }
 }

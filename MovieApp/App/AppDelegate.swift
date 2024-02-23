@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  MVVM-C_BoilerPlate
+//  MovieApp
 //
 //  Created by Nurşah Ari on 17.02.2024.
 //

@@ -1,6 +1,6 @@
 //
 //  MovieDetailViewController.swift
-//  MVVM-C_BoilerPlate
+//  MovieApp
 //
 //  Created by Nurşah Ari on 17.02.2024.
 //
@@ -112,6 +112,10 @@ class MovieDetailViewController: UIViewController, UITextViewDelegate {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         self.present(alert, animated: true)
+    }
+    
+    @objc func buttonAction(_ sender:UIButton!) {
+        viewModel.goToIMDBPage(movieId)
     }
     
 }
@@ -321,9 +325,5 @@ extension MovieDetailViewController {
             goToImdbButton.leftAnchor.constraint(equalTo: infoView.leftAnchor,constant: padding),
             goToImdbButton.rightAnchor.constraint(equalTo: infoView.rightAnchor, constant: -padding)
         ])
-    }
-    
-    @objc func buttonAction(_ sender:UIButton!) {
-        viewModel.goToiMDBPage(movieId)
     }
 }

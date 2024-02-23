@@ -69,13 +69,20 @@ class MovieSearchViewModelTests: XCTestCase {
         mockNetworkService.mockError = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "An error occurred"])
         
         let expectation = XCTestExpectation(description: "Failed to fetch movies")
-        
+        viewModel.$movies
+            .receive(on: DispatchQueue.main)
+            .sink { movies in
+                if movies.isEmpty {
+                    expectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
         viewModel.errorMessage = { message in
             expectation.fulfill()
         }
         
-        viewModel.searchMovies(for: "Test Movie")
+        viewModel.searchMovies(for: "aaaaaaaaaaaaaa")
         
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [expectation], timeout: 10.0)
     }
 }

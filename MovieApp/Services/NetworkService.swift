@@ -16,10 +16,10 @@ class NetworkService {
     
     func fetchResource<T: Decodable>(from endpoint: API) -> AnyPublisher<T, AFError> {
         return session.request(endpoint.url, method: endpoint.method, parameters: endpoint.parameters, encoding: JSONEncoding.default)
-            .publishDecodable(type: T.self) // Alamofire ve Combine entegrasyonu
-            .value() // Yalnızca başarılı sonuçları al
-            .receive(on: RunLoop.main) // Ana iş parçacığında al
-            .eraseToAnyPublisher() // Geri dönüş tipini AnyPublisher olarak belirle
+            .publishDecodable(type: T.self)
+            .value()
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
     }
 }
 
